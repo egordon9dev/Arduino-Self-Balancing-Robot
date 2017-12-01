@@ -73,7 +73,7 @@ PidVars pitch_pid = pidDef, vel_pid = pidDef;
  * 1: pitch
  * 2: vel
  */
-int tuning = 2;
+int tuning = 0;
 char s[60];
 volatile unsigned char L1prev = 0, R1prev = 0;
 volatile long leftEnc = 0, rightEnc = 0;
@@ -240,6 +240,9 @@ void loop() {
           vel_pid.kp = Serial.read() + Serial.read()/100.0;
           vel_pid.ki = Serial.read() + (Serial.read() | (Serial.read() << 8))/10000.0;
           vel_pid.kd = Serial.read() | (Serial.read() << 8);
+        } else {
+          //ignore pid serial data
+          for(int i = 0; i < 7; i++) Serial.read();
         }
         if(DEBUG_MODE == 2) {
           PidVars pid = pidDef;
